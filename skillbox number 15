@@ -1,0 +1,104 @@
+Задание 1:
+SELECT orderNumber, productCode, quantityOrdered * priceEach AS totalcost
+FROM orderdetails
+ORDER BY totalcost DESC
+LIMIT 10
+
+Задание 2:
+SELECT orderNumber, SUM(quantityOrdered * priceEach) AS total
+FROM orderdetails
+GROUP BY orderNumber
+HAVING total > 59000
+
+Задание 3:
+SELECT
+    o.orderNumber,
+    o.orderDate,
+    o.status,
+    SUM(od.quantityOrdered * od.priceEach) AS total
+FROM
+    orderdetails od
+INNER JOIN
+    orders o ON od.orderNumber = o.orderNumber
+GROUP BY
+    o.orderNumber, o.orderDate, o.status
+HAVING
+    total > 59000
+ORDER BY
+    total DESC
+
+Задание 4:
+SELECT
+    c.contactFirstName,
+    c.contactLastName,
+    c.country,
+    o.orderNumber,
+    o.orderDate,
+    o.status,
+    SUM(od.quantityOrdered * od.priceEach) AS total
+FROM
+    orderdetails od
+INNER JOIN
+    orders o ON od.orderNumber = o.orderNumber
+INNER JOIN
+    customers c ON o.customerNumber = c.customerNumber
+GROUP BY
+    c.contactFirstName,
+    c.contactLastName,
+    c.country,
+    o.orderNumber,
+    o.orderDate,
+    o.status
+HAVING
+    total > 59000
+ORDER BY
+    total DESC
+
+Задание 5:
+SELECT
+    p.productName,
+    SUM(od.quantityOrdered * od.priceEach) AS total
+FROM
+    orderdetails od
+INNER JOIN
+    products p ON od.productCode = p.productCode
+GROUP BY
+    p.productName
+ORDER BY
+    total DESC
+LIMIT 10
+
+Задание 6:
+SELECT
+    e.firstName AS employeeFirstName,
+    e.lastName AS employeeLastName,
+    c.contactFirstName AS customerFirstName,
+    c.contactLastName AS customerLastName
+FROM
+    employees e
+LEFT JOIN
+    customers c ON e.employeeNumber = c.salesRepEmployeeNumber
+UNION
+SELECT
+    e.firstName AS employeeFirstName,
+    e.lastName AS employeeLastName,
+    c.contactFirstName AS customerFirstName,
+    c.contactLastName AS customerLastName
+FROM
+    employees e
+RIGHT JOIN
+    customers c ON e.employeeNumber = c.salesRepEmployeeNumber
+
+Задание 7:
+SELECT
+    e.firstName AS firstName,
+    e.lastName AS lastName,
+    e.jobTitle AS jobTitle,
+    s.firstName AS subFirstName,
+    s.lastName AS subLastName
+FROM
+    employees e
+LEFT JOIN
+    employees s ON e.employeeNumber = s.reportsTo
+ORDER BY
+    e.employeeNumber
